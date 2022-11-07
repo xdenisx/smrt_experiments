@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import sys
+sys.path.append("../smrt")
 from smrt import make_snowpack, make_model, make_soil, sensor_list, make_ice_column, PSU
 from smrt.atmosphere.simple_isotropic_atmosphere import SimpleIsotropicAtmosphere
 from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
@@ -132,9 +134,9 @@ def calc_emissivity_thickness(fq, cor_length=0.05e-3, snow_thickness=1, T=265,
                               substrate='MYI',
                               roughness_rms=None):
     ''' Calculate emissivity for different thickness '''
-    e1_h, e1_v = calc_e(fq, cor_length, snow_thickness, T,
-                                                 snow_ms_model, theta, sn_density,
-                                                 substrate, roughness_rms)
+    e1_h, e1_v = calc_e(fq, snow_thickness, T,
+                        snow_ms_model, theta, sn_density,
+                        substrate, roughness_rms)
     return e1_h, e1_v
 
 ####################################################################
