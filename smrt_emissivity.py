@@ -131,7 +131,6 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
     sresult_1 = m.run(radiometer, medium)
 
     # V-pol
-    # Picard equation for Emissivity
     emissivity_V = ( sresult_1.TbV() - sresult_0.TbV() ) / Tbdown
     #emissivity_V = (sresult_0.TbV() + sresult_1.TbV()) / 2 / T
     # emissivity_V = sresult_1.TbV() / T
@@ -139,7 +138,7 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
     # H-pol
     emissivity_H = ( sresult_1.TbH() - sresult_0.TbH() ) / Tbdown
     #emissivity_H = (sresult_0.TbH() + sresult_1.TbH()) / 2 / T
-    # emissivity_H = sresult_1.TbH() / T
+    #emissivity_H = sresult_1.TbH() / T
 
     return emissivity_H, emissivity_V
 
