@@ -108,7 +108,8 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
                                     add_water_substrate="ocean"  # see comment below
                                     )
 
-    atmosphere1K = SimpleIsotropicAtmosphere(tbdown=1, tbup=0, trans=1)
+    Tbdown = 1
+    atmosphere1K = SimpleIsotropicAtmosphere(tbdown=Tbdown, tbup=0, trans=1)
 
     snowpack = setup_snowpack(T=T, model=model, thickness_1=thickness_1, sn_density=sn_density)
 
@@ -131,12 +132,12 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
 
     # V-pol
     # Picard equation for Emissivity
-    emissivity_V = (sresult_1.TbV() - sresult_1.TbV())
+    emissivity_V = ( sresult_1.TbV() - sresult_0.TbV() ) / Tbdown
     #emissivity_V = (sresult_0.TbV() + sresult_1.TbV()) / 2 / T
     # emissivity_V = sresult_1.TbV() / T
 
     # H-pol
-    emissivity_H = (sresult_1.TbH() - sresult_1.TbH())
+    emissivity_H = ( sresult_1.TbH() - sresult_0.TbH() ) / Tbdown
     #emissivity_H = (sresult_0.TbH() + sresult_1.TbH()) / 2 / T
     # emissivity_H = sresult_1.TbH() / T
 
