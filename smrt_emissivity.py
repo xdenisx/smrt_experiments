@@ -9,6 +9,7 @@ from smrt import make_snowpack, make_model, make_soil, sensor_list, make_ice_col
 from smrt.atmosphere.simple_isotropic_atmosphere import SimpleIsotropicAtmosphere
 from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
 import smrt
+import argparse
 
 def setup_snowpack(model='exponential', thickness_1=1, sn_density=320, T=265.,
                    radius=0.1e-3, stickiness=0.1, substrate=None, corr_length=None):
@@ -157,6 +158,19 @@ def calc_emissivity_thickness(fq, snow_thickness=1, T=265,
 # Calculate emissivity at fixed angle for different snow thicknesses
 ####################################################################
 
+parser = argparse.ArgumentParser(description='Calculate Emissivity')
+
+parser.add_argument('-o', '--out_folder',
+                    required=True,
+                    help='Output folder')
+
+args = parser.parse_args()
+
+if args.out_folder:
+    out_path = args.out_folder
+else:
+    raise('Please specify output folder (-o)')
+
 # Snow microstructure models
 sn_ms_model_list = ['autocorrelation', 'exponential', 'gaussian_random_field',
                     'homogeneous', 'independent_sphere', 'sampled_autocorrelation',
@@ -266,3 +280,4 @@ for i, density in enumerate(d_res.keys()):
 plt.xlabel('Snow thickness, m')
 plt.ylabel('Emissivity')
 plt.subplots_adjust(hspace=0.2)
+plt.savefig(f'{out_path}/e.png', dpi=300)
