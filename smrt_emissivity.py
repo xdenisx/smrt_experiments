@@ -13,7 +13,9 @@ import smrt
 
 def setup_snowpack(model='exponential', thickness_1=1, sn_density=320, T=265.,
                    radius=0.1e-3, stickiness=0.1, substrate=None, corr_length=None):
-    # ### Make a snow layer
+    '''
+    Make a snow layer
+    '''
 
     print(f'\nMicrostructure model: {model}\n')
     print(f'\nSnow density: {sn_density}')
@@ -48,7 +50,10 @@ def calc_emissivity_thickness(fq, cor_length=0.05e-3, snow_thickness=1, T=265,
                               sn_density=320,
                               substrate='MYI',
                               roughness_rms=None):
-    ''' Calculate emissivity for different thickness '''
+    '''
+    Calculate emissivity for different thickness
+    '''
+
     e1_h, e1_v = _do_test_kirchoff_law_thickness(fq, cor_length, snow_thickness, T,
                                                  snow_ms_model, theta, sn_density,
                                                  substrate, roughness_rms)
@@ -57,7 +62,19 @@ def calc_emissivity_thickness(fq, cor_length=0.05e-3, snow_thickness=1, T=265,
 
 def calc_e(fq, thickness_1, T, model, theta, sn_density,
                                     substrate, roughness_rms):
-    # roughness_rms=0.01,
+    '''
+
+    :param fq: frequency
+    :param thickness_1: max snow thickness [m]
+    :param T: temperature at surface [K]
+    :param model: snow microstructure model
+    :param theta: incidence angle
+    :param sn_density: snow density [kg/m3]
+    :param substrate: substrate name
+    :param roughness_rms: roughness [mm]
+    :return: emissitivity at H- and V-polarization
+    '''
+
     if substrate == 'land':
         print(f'roughness_rms: {roughness_rms}')
         substrate = make_soil('soil_wegmuller',
@@ -100,7 +117,6 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
     medium = snowpack + substrate
 
     # create the sensor
-    # sensor = sensor_list.passive(1.4e9, 40.)
     radiometer = sensor_list.passive(fq, theta)
 
     n_max_stream = 128  # TB calculation is more accurate if number of streams is increased (currently: default = 32);
@@ -118,15 +134,12 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
     # Picard equation for Emissivity
     emissivity_V = (sresult_0.TbV() + sresult_1.TbV()) / 2 / T
     # emissivity_V = sresult_1.TbV() / T
-    # np.testing.assert_allclose(emissivity_V, 1 - reflectivity_V, atol=0.002)
 
     # H-pol
     emissivity_H = (sresult_0.TbH() + sresult_1.TbH()) / 2 / T
     # emissivity_H = sresult_1.TbH() / T
-    # np.testing.assert_allclose(emissivity_H, 1 - reflectivity_H, atol=0.002)
 
     return emissivity_H, emissivity_V
-
 
 def calc_emissivity_thickness(fq, snow_thickness=1, T=265,
                               snow_ms_model='sticky_hard_spheres',
