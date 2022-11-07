@@ -1,3 +1,4 @@
+# Adopted from SMRT code: https://github.com/smrt-model/smrt
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -127,7 +128,7 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
     return emissivity_H, emissivity_V
 
 
-def calc_emissivity_thickness(fq, cor_length=0.05e-3, snow_thickness=1, T=265,
+def calc_emissivity_thickness(fq, snow_thickness=1, T=265,
                               snow_ms_model='sticky_hard_spheres',
                               theta=53.,
                               sn_density=320,
@@ -160,12 +161,11 @@ sn_th_min = 0.01
 sn_th_step = 0.1
 
 sn_density = 600
-substrate='land'
-roughness_rms=0.01
-T=265.
+substrate = 'land'
+roughness_rms = 0.01
+T = 265.
 
 snow_ms_model = sn_ms_model_list[6]
-
 densities_list = list(range(100, 700, 100))
 
 d_res = {}
@@ -176,10 +176,6 @@ for sn_density in densities_list:
         d_res[sn_density][pol]= {}
         d_res[sn_density][pol]= {}
 
-#for pol in polarizations:
-#    d_res[pol]= {}
-#    d_res[pol]= {}
-
 ll_e1_h, ll_e1_v = [], []
 
 for sn_density in densities_list:
@@ -189,27 +185,28 @@ for sn_density in densities_list:
 
         # Calculate E for different snow thickness
         for s_th in np.arange(sn_th_min, sn_th_max, sn_th_step):
-            e1_h, e1_v = calc_emissivity_thickness(fq=fq, cor_length=0.05e-3,
-                                                               snow_thickness=[s_th], T=T,
-                                                               snow_ms_model=snow_ms_model,
-                                                               sn_density=sn_density,
-                                                               substrate=substrate,
-                                                               theta=theta,
-                                                               roughness_rms=roughness_rms)
+            e1_h, e1_v = calc_emissivity_thickness(fq=fq,
+                                                   snow_thickness=[s_th],
+                                                   T=T,
+                                                   snow_ms_model=snow_ms_model,
+                                                   sn_density=sn_density,
+                                                   substrate=substrate,
+                                                   theta=theta,
+                                                   roughness_rms=roughness_rms)
             ll_e1_h.append(e1_h)
             ll_e1_v.append(e1_v)
 
         fq_str = fq / 1e9
 
-        d_res[sn_density]['h'][fq_str]= {}
-        d_res[sn_density]['v'][fq_str]= {}
+        d_res[sn_density]['h'][fq_str] = {}
+        d_res[sn_density]['v'][fq_str] = {}
 
         d_res[sn_density]['h'][fq_str]['e1'] = ll_e1_h
         d_res[sn_density]['v'][fq_str]['e1'] = ll_e1_v
 
         ll_e1_h, ll_e1_v = [], []
 
-ncols = 3  # len(d_res.keys())
+ncols = 3
 nrows = int(np.ceil(len(d_res.keys()) / ncols))
 
 if substrate == 'land':
@@ -237,9 +234,10 @@ for i, density in enumerate(d_res.keys()):
                             label=f'{pol.upper()} {ikey} GHz',
                             linestyle='dashed', c=colors[i_color])
 
-    ax[c_ch, r_ch].set_title(
-        f'Snow density={density}, $\Theta$={theta}$^\circ$\nSubstrate: {substrate_title}\n Surface roughnes={roughness_rms}',
-        fontsize='small')
+    ax[c_ch, r_ch].set_title(f'Snow density={density},'
+                             f'$\Theta$={theta}$^\circ$\nSubstrate:'
+                             f'{substrate_title}\n Surface roughnes={roughness_rms}',
+                             fontsize='small')
 
     pol = 'v'
     for i_color, ikey in enumerate(d_res[density][pol]):
@@ -248,7 +246,6 @@ for i, density in enumerate(d_res.keys()):
                             linewidth=3, c=colors[i_color])
 
     ax[c_ch, r_ch].legend(loc='lower right', prop={'size': 6})
-
     ax[c_ch, r_ch].grid()
 
     r_ch += 1
