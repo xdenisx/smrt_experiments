@@ -10,7 +10,6 @@ from smrt.atmosphere.simple_isotropic_atmosphere import SimpleIsotropicAtmospher
 from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
 import smrt
 
-
 def setup_snowpack(model='exponential', thickness_1=1, sn_density=320, T=265.,
                    radius=0.1e-3, stickiness=0.1, substrate=None, corr_length=None):
     '''
@@ -23,8 +22,6 @@ def setup_snowpack(model='exponential', thickness_1=1, sn_density=320, T=265.,
 
     # Best?
     if model == 'sticky_hard_spheres':
-        # 0.01, 0.05,
-        # 100, 100,
         sp = make_snowpack(thickness_1, 'sticky_hard_spheres', density=sn_density,
                            temperature=T, radius=radius, stickiness=stickiness)
 
@@ -63,6 +60,7 @@ def calc_emissivity_thickness(fq, cor_length=0.05e-3, snow_thickness=1, T=265,
 def calc_e(fq, thickness_1, T, model, theta, sn_density,
                                     substrate, roughness_rms):
     '''
+    Calculate emissivity over snowpack
 
     :param fq: frequency
     :param thickness_1: max snow thickness [m]
@@ -266,7 +264,3 @@ for i, density in enumerate(d_res.keys()):
 plt.xlabel('Snow thickness, m')
 plt.ylabel('Emissivity')
 plt.subplots_adjust(hspace=0.2)
-
-
-
-
