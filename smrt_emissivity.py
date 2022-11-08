@@ -109,9 +109,13 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
                                     )
 
     Tbdown = 1
-    atmosphere1K = SimpleIsotropicAtmosphere(tbdown=Tbdown, tbup=0, trans=1)
+    atmosphere1K = SimpleIsotropicAtmosphere(tbdown=1,
+                                             tbup=0,
+                                             trans=1)
 
-    snowpack = setup_snowpack(T=T, model=model, thickness_1=thickness_1, sn_density=sn_density)
+    snowpack = setup_snowpack(T=T, model=model,
+                              thickness_1=thickness_1,
+                              sn_density=sn_density)
 
     # add snowpack on top of substrate:
     medium = snowpack + substrate
@@ -127,18 +131,21 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
 
     # run the model
     sresult_0 = m.run(radiometer, medium)
-    snowpack.atmosphere = atmosphere1K
+    medium.atmosphere = atmosphere1K
     sresult_1 = m.run(radiometer, medium)
 
     # V-pol
     emissivity_V = ( sresult_1.TbV() - sresult_0.TbV() ) / Tbdown
     #emissivity_V = (sresult_0.TbV() + sresult_1.TbV()) / 2 / T
     # emissivity_V = sresult_1.TbV() / T
+    print(f'sresult_1.TbV(),sresult_0.TbV: {sresult_1.TbV()},{sresult_0.TbV()}')
+    print(f'Ev={emissivity_V}')
 
     # H-pol
     emissivity_H = ( sresult_1.TbH() - sresult_0.TbH() ) / Tbdown
     #emissivity_H = (sresult_0.TbH() + sresult_1.TbH()) / 2 / T
     #emissivity_H = sresult_1.TbH() / T
+    print(f'Eh={emissivity_H}')
 
     return emissivity_H, emissivity_V
 
@@ -183,7 +190,7 @@ fq_list = [7e9, 11e9, 19e9, 24e9, 37e9, 89e9]
 polarizations = ['h', 'v']
 theta = 55
 
-sn_th_max = 3.
+sn_th_max = 4.
 sn_th_min = 0.01
 sn_th_step = 0.1
 
