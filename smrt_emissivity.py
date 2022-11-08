@@ -91,7 +91,7 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
                                     )
 
     Tbdown = 1
-    atmosphere1K = SimpleIsotropicAtmosphere(tbdown=1,
+    atmosphere1K = SimpleIsotropicAtmosphere(tbdown=Tbdown,
                                              tbup=0,
                                              trans=1)
 
