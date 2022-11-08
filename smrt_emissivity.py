@@ -41,25 +41,7 @@ def setup_snowpack(model='exponential', thickness_1=1, sn_density=320, T=265.,
 
     return sp
 
-
-def calc_emissivity_thickness(fq, cor_length=0.05e-3, snow_thickness=1, T=265,
-                              snow_ms_model='sticky_hard_spheres',
-                              theta=53.,
-                              sn_density=320,
-                              substrate='MYI',
-                              roughness_rms=None):
-    '''
-    Calculate emissivity for different thickness
-    '''
-
-    e1_h, e1_v = _do_test_kirchoff_law_thickness(fq, cor_length, snow_thickness, T,
-                                                 snow_ms_model, theta, sn_density,
-                                                 substrate, roughness_rms)
-    return e1_h, e1_v
-
-
-def calc_e(fq, thickness_1, T, model, theta, sn_density,
-                                    substrate, roughness_rms):
+def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rms, eq_num):
     '''
     Calculate emissivity over snowpack
 
@@ -135,16 +117,34 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density,
     sresult_1 = m.run(radiometer, medium)
 
     # V-pol
-    emissivity_V = ( sresult_1.TbV() - sresult_0.TbV() ) / Tbdown
+    if eq_num == '1':
+        print(f'Equation {eq_num}')
+        emissivity_V = ( sresult_1.TbV() - sresult_0.TbV() ) / Tbdown
+    elif eq_num == '2':
+        print(f'Equation {eq_num}')
+        emissivity_V = (sresult_0.TbV()) / T
+    else:
+        raise('Please specify correct equation number (1/2)')
+
+    # From old code (incorrect?)
     #emissivity_V = (sresult_0.TbV() + sresult_1.TbV()) / 2 / T
-    # emissivity_V = sresult_1.TbV() / T
+
     print(f'sresult_1.TbV(),sresult_0.TbV: {sresult_1.TbV()},{sresult_0.TbV()}')
     print(f'Ev={emissivity_V}')
 
     # H-pol
-    emissivity_H = ( sresult_1.TbH() - sresult_0.TbH() ) / Tbdown
+    if eq_num == '1':
+        print(f'Equation {eq_num}')
+        emissivity_H = ( sresult_1.TbH() - sresult_0.TbH() ) / Tbdown
+    elif eq_num=='2':
+        print(f'Equation {eq_num}')
+        emissivity_H = (sresult_0.TbH()) / T
+    else:
+        raise('Please specify correct equation number (1/2)')
+
+    # From old code (incorrect?)
     #emissivity_H = (sresult_0.TbH() + sresult_1.TbH()) / 2 / T
-    #emissivity_H = sresult_1.TbH() / T
+
     print(f'Eh={emissivity_H}')
 
     return emissivity_H, emissivity_V
@@ -154,11 +154,12 @@ def calc_emissivity_thickness(fq, snow_thickness=1, T=265,
                               theta=53.,
                               sn_density=320,
                               substrate='MYI',
-                              roughness_rms=None):
+                              roughness_rms=None,
+                              eq_num=1):
     ''' Calculate emissivity for different thickness '''
     e1_h, e1_v = calc_e(fq, snow_thickness, T,
                         snow_ms_model, theta, sn_density,
-                        substrate, roughness_rms)
+                        substrate, roughness_rms, eq_num)
     return e1_h, e1_v
 
 ####################################################################
@@ -171,12 +172,18 @@ parser.add_argument('-o', '--out_folder',
                     required=True,
                     help='Output folder')
 
+parser.add_argument('-e', '--e_equation',
+                    required=False,
+                    help='E-equation number')
+
 args = parser.parse_args()
 
-if args.out_folder:
-    out_path = args.out_folder
+out_path = args.out_folder
+
+if args.e_equation:
+    eq_num = args.e_equation
 else:
-    raise('Please specify output folder (-o)')
+    eq_num=1
 
 # Snow microstructure models
 sn_ms_model_list = ['autocorrelation', 'exponential', 'gaussian_random_field',
@@ -190,7 +197,7 @@ fq_list = [7e9, 11e9, 19e9, 24e9, 37e9, 89e9]
 polarizations = ['h', 'v']
 theta = 55
 
-sn_th_max = 4.
+sn_th_max = 3.
 sn_th_min = 0.01
 sn_th_step = 0.1
 
@@ -226,7 +233,8 @@ for sn_density in densities_list:
                                                    sn_density=sn_density,
                                                    substrate=substrate,
                                                    theta=theta,
-                                                   roughness_rms=roughness_rms)
+                                                   roughness_rms=roughness_rms,
+                                                   eq_num=eq_num)
             ll_e1_h.append(e1_h)
             ll_e1_v.append(e1_v)
 
