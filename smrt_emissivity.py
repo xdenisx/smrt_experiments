@@ -12,7 +12,7 @@ import smrt
 import argparse
 
 def setup_snowpack(model='exponential', thickness_1=1, sn_density=320, T=265.,
-                   radius=0.1e-3, stickiness=0.1, substrate=None, corr_length=None):
+                   radius=1e-4, stickiness=0.1, substrate=None, corr_length=None):
     '''
     Make a snow layer
     '''
@@ -23,21 +23,30 @@ def setup_snowpack(model='exponential', thickness_1=1, sn_density=320, T=265.,
 
     # Best?
     if model == 'sticky_hard_spheres':
-        sp = make_snowpack(thickness_1, 'sticky_hard_spheres', density=sn_density,
-                           temperature=T, radius=radius, stickiness=stickiness)
-
-    if model == 'homogeneous':
-        sp = make_snowpack(thickness_1, 'homogeneous', density=sn_density, radius=radius)
-
-    if model == 'exponential':
-        sp = make_snowpack(thickness_1, 'exponential', density=sn_density, corr_length=corr_length)
+        # 'radius': 0.001, 'frac_volume': 0.3
+        sp = make_snowpack(thickness_1, model,
+                           density=sn_density,
+                           temperature=T,
+                           radius=radius,
+                           stickiness=stickiness)
 
     if model == 'independent_sphere':
-        sp = make_snowpack(thickness_1, 'independent_sphere', density=sn_density, radius=radius)
+        sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius)
+
+    if model == 'homogeneous':
+        sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius)
+
+    if model == 'sampled_autocorrelation':
+        sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius)
+
+    '''
+    if model == 'exponential':
+        sp = make_snowpack(thickness_1, 'exponential', density=sn_density, corr_length=corr_length)
 
     if model == 'gaussian_random_field':
         sp = make_snowpack([thickness_1], 'gaussian_random_field', density=sn_density, corr_length=radius,
                            repeat_distance=1.0)
+    '''
 
     return sp
 
@@ -192,6 +201,9 @@ sn_ms_model_list = ['autocorrelation', 'exponential', 'gaussian_random_field',
                     'test_sticky_hard_spheres', 'teubner_strey', 'unified_autocorrelation',
                     'unified_scaled_exponential', 'unified_sticky_hard_spheres', 'unified_teubner_strey']
 
+
+snow_ms_model = sn_ms_model_list[3]
+
 # Basic parameters
 fq_list = [7e9, 11e9, 19e9, 24e9, 37e9, 89e9]
 polarizations = ['h', 'v']
@@ -206,7 +218,6 @@ substrate = 'land'
 roughness_rms = 0.01
 T = 265.
 
-snow_ms_model = sn_ms_model_list[6]
 densities_list = list(range(100, 700, 100))
 
 d_res = {}
@@ -278,7 +289,8 @@ for i, density in enumerate(d_res.keys()):
 
     ax[c_ch, r_ch].set_title(f'Snow density={density},'
                              f'$\Theta$={theta}$^\circ$\nSubstrate:'
-                             f'{substrate_title}\n Surface roughnes={roughness_rms}',
+                             f'{substrate_title}\n Surface roughnes={roughness_rms}'
+                             f'\nMicrostructure model={snow_ms_model}',
                              fontsize='small')
 
     pol = 'v'
@@ -295,4 +307,4 @@ for i, density in enumerate(d_res.keys()):
 plt.xlabel('Snow thickness, m')
 plt.ylabel('Emissivity')
 plt.subplots_adjust(hspace=0.2)
-plt.savefig(f'{out_path}/e.png', dpi=300)
+plt.savefig(f'{out_path}/e_{snow_ms_model}.png', dpi=300)
