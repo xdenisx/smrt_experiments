@@ -204,7 +204,7 @@ sn_ms_model_list = ['autocorrelation', 'exponential', 'gaussian_random_field',
                     'unified_scaled_exponential', 'unified_sticky_hard_spheres', 'unified_teubner_strey']
 
 
-snow_ms_model = sn_ms_model_list[6]
+snow_ms_model = sn_ms_model_list[4]
 
 # Basic parameters
 fq_list = [7e9, 11e9, 19e9, 24e9, 37e9, 89e9]
@@ -271,7 +271,10 @@ else:
 
 plt.clf()
 
-fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(20, 15))
+fig, ax = plt.subplots(nrows=nrows, ncols=ncols, figsize=(16, 12))
+
+# Move plot title inside panel
+plt.rcParams['axes.titley'] = 0.1
 
 r_ch = 0
 c_ch = 0
@@ -302,11 +305,22 @@ for i, density in enumerate(d_res.keys()):
                             linewidth=3, c=colors[i_color])
 
     ax[c_ch, r_ch].legend(loc='lower right', prop={'size': 6})
-    ax[c_ch, r_ch].grid()
+    ax[c_ch, r_ch].grid(linewidth=0.15)
+
+    ax[c_ch, r_ch].set_ylim([0.65, 1.01])
+
+    if r_ch > 0:
+        ax[c_ch, r_ch].axes.yaxis.set_ticklabels([])
+
+    if r_ch == 0:
+        ax[c_ch, r_ch].set_ylabel('Emissivity')
 
     r_ch += 1
 
 plt.xlabel('Snow thickness, m')
-plt.ylabel('Emissivity')
-plt.subplots_adjust(hspace=0.2)
-plt.savefig(f'{out_path}/e_{snow_ms_model}.png', dpi=300)
+#plt.ylabel('Emissivity')
+
+plt.subplots_adjust(hspace=0.1)
+plt.subplots_adjust(wspace=0.1)
+
+plt.savefig(f'{out_path}/e_{snow_ms_model}.png', bbox_inches='tight', dpi=300)
