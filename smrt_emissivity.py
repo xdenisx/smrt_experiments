@@ -109,7 +109,7 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
                               sn_density=sn_density)
 
     # add snowpack on top of substrate:
-    medium = snowpack #+ substrate
+    medium = snowpack + substrate
 
     # create the sensor
     radiometer = sensor_list.passive(fq, theta)
@@ -145,7 +145,7 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
     # H-pol
     if eq_num == '1':
         print(f'Equation {eq_num}')
-        #emissivity_H = ( sresult_1.TbH() - sresult_0.TbH() ) / Tbdown
+        #reflectivity_H = ( sresult_1.TbH() - sresult_0.TbH() ) / Tbdown
         emissivity_H = 1 - (sresult_1.TbH() - sresult_0.TbH()) / Tbdown
     elif eq_num=='2':
         print(f'Equation {eq_num}')
