@@ -109,7 +109,7 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
                               sn_density=sn_density)
 
     # add snowpack on top of substrate:
-    medium = snowpack + substrate
+    medium = snowpack #+ substrate
 
     # create the sensor
     radiometer = sensor_list.passive(fq, theta)
@@ -128,7 +128,8 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
     # V-pol
     if eq_num == '1':
         print(f'Equation {eq_num}')
-        emissivity_V = ( sresult_1.TbV() - sresult_0.TbV() ) / Tbdown
+        #reflectivity_V = ( sresult_1.TbV() - sresult_0.TbV() ) / Tbdown
+        emissivity_V = 1 - (sresult_1.TbV() - sresult_0.TbV()) / Tbdown
     elif eq_num == '2':
         print(f'Equation {eq_num}')
         emissivity_V = (sresult_0.TbV()) / T
@@ -144,7 +145,8 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
     # H-pol
     if eq_num == '1':
         print(f'Equation {eq_num}')
-        emissivity_H = ( sresult_1.TbH() - sresult_0.TbH() ) / Tbdown
+        #emissivity_H = ( sresult_1.TbH() - sresult_0.TbH() ) / Tbdown
+        emissivity_H = 1 - (sresult_1.TbH() - sresult_0.TbH()) / Tbdown
     elif eq_num=='2':
         print(f'Equation {eq_num}')
         emissivity_H = (sresult_0.TbH()) / T
@@ -152,7 +154,7 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
         raise('Please specify correct equation number (1/2)')
 
     # From old code (incorrect?)
-    #emissivity_H = (sresult_0.TbH() + sresult_1.TbH()) / 2 / T
+    #reflectivity_H = (sresult_0.TbH() + sresult_1.TbH()) / 2 / T
 
     print(f'Eh={emissivity_H}')
 
@@ -202,7 +204,7 @@ sn_ms_model_list = ['autocorrelation', 'exponential', 'gaussian_random_field',
                     'unified_scaled_exponential', 'unified_sticky_hard_spheres', 'unified_teubner_strey']
 
 
-snow_ms_model = sn_ms_model_list[3]
+snow_ms_model = sn_ms_model_list[6]
 
 # Basic parameters
 fq_list = [7e9, 11e9, 19e9, 24e9, 37e9, 89e9]
