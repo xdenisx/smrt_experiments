@@ -32,13 +32,10 @@ def setup_snowpack(model='sticky_hard_spheres',
                            temperature=T,
                            radius=radius,
                            stickiness=stickiness)
-
     if model == 'independent_sphere':
         sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius, stickiness=stickiness)
-
     if model == 'homogeneous':
         sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius, stickiness=stickiness)
-
     if model == 'sampled_autocorrelation':
         sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius, stickiness=stickiness)
 
@@ -101,6 +98,7 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
                                              trans=1)
 
     print(f'Crystal radius: {radius_um}')
+    print(f'Crystal stickiness: {stickiness}')
     snowpack = setup_snowpack(T=T, model=model,
                               thickness_1=thickness_1,
                               sn_density=sn_density,
@@ -166,8 +164,8 @@ def calc_emissivity_thickness(fq, snow_thickness=1, T=265,
                               substrate='MYI',
                               roughness_rms=None,
                               eq_num=1,
-                              radius=1e-4,
-                              stickiness=0.1):
+                              radius=0.3e-3,
+                              stickiness=0.2):
     ''' Calculate emissivity for different thickness '''
     e1_h, e1_v = calc_e(fq, snow_thickness, T,
                         snow_ms_model, theta, sn_density,
@@ -230,10 +228,10 @@ T = 265.
 # Microstructure parameters
 ############################
 # Crystal radius
-radius = 0.1e-3
+radius = 0.15e-3
 radius_um = int(radius*10**6)
 # Stickiness of 0.2 is recommended as a first guess in SMRT [Loewe and Picard, 2015]
-stickiness = 0.2
+stickiness = 0.1
 
 d_res = {}
 
@@ -303,13 +301,26 @@ for i, density in enumerate(d_res.keys()):
                             label=f'{pol.upper()} {ikey} GHz',
                             linestyle='dashed', c=colors[i_color])
 
-    ax[c_ch, r_ch].set_title(f'Snow density={density},\ '
-                             f'$\Theta$={theta}$^\circ$\n Substrate:\ {substrate_title}'
+    '''
+    ax[c_ch, r_ch].set_title(f'Sn. density={density}\ kg/m^3,$\ \Theta$={theta}$^\circ$'
+                             f'\nSubstrate:$\ $ {substrate_title}'
                              f'\nSurface roughnes={roughness_rms}'
                              f'\nMicr. model={snow_ms_model}'
-                             f'\nStickiness={}'
-                             f'\nCrystal R={}',
-                             fontsize='small')
+                             f'\nStickiness={stickiness}'
+                             f'\nCrystal R={radius_um}$\ \mu m$',
+                             fontsize='medium')
+    '''
+
+    text = f'Sn. density={density}$\ kg/m^3,\ \Theta$={theta}$^\circ$' \
+        f'\nSubstrate:$\ $ {substrate_title}' \
+        f'\nSurface roughnes={roughness_rms}' \
+        f'\nMicr. model={snow_ms_model}' \
+        f'\nStickiness={stickiness}' \
+        f'\nCrystal R={radius_um}$\ \mu m$'
+
+    ax[c_ch, r_ch].text(.01, .01, text, ha='left', va='bottom',
+                        transform=ax[c_ch, r_ch].transAxes,
+                        fontsize='medium')
 
     pol = 'v'
     for i_color, ikey in enumerate(d_res[density][pol]):
@@ -317,7 +328,7 @@ for i, density in enumerate(d_res.keys()):
                             label=f'{pol.upper()} {ikey} GHz',
                             linewidth=3, c=colors[i_color])
 
-    ax[c_ch, r_ch].legend(loc='lower right', prop={'size': 6})
+    ax[c_ch, r_ch].legend(loc='lower right', prop={'size': 8})
     ax[c_ch, r_ch].grid(linewidth=0.15)
 
     ax[c_ch, r_ch].set_ylim([0.25, 1.01])
