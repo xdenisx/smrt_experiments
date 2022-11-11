@@ -11,19 +11,22 @@ from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
 import smrt
 import argparse
 
-def setup_snowpack(model='exponential', thickness_1=1, sn_density=320, T=265.,
-                   radius=1e-4, stickiness=0.1, substrate=None, corr_length=None):
+def setup_snowpack(model='sticky_hard_spheres',
+                   thickness_1=1,
+                   sn_density=320,
+                   T=265.,
+                   radius=0.3e-3,
+                   stickiness=0.2):
     '''
     Make a snow layer
     '''
 
-    print(f'\nMicrostructure model: {model}\n')
+    print(f'\nMicrostructure model: {model}')
     print(f'\nSnow density: {sn_density}')
     print(f'Snow thickness: {thickness_1}')
 
     # Best?
     if model == 'sticky_hard_spheres':
-        # 'radius': 0.001, 'frac_volume': 0.3
         sp = make_snowpack(thickness_1, model,
                            density=sn_density,
                            temperature=T,
@@ -31,26 +34,17 @@ def setup_snowpack(model='exponential', thickness_1=1, sn_density=320, T=265.,
                            stickiness=stickiness)
 
     if model == 'independent_sphere':
-        sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius)
+        sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius, stickiness=stickiness)
 
     if model == 'homogeneous':
-        sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius)
+        sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius, stickiness=stickiness)
 
     if model == 'sampled_autocorrelation':
-        sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius)
-
-    '''
-    if model == 'exponential':
-        sp = make_snowpack(thickness_1, 'exponential', density=sn_density, corr_length=corr_length)
-
-    if model == 'gaussian_random_field':
-        sp = make_snowpack([thickness_1], 'gaussian_random_field', density=sn_density, corr_length=radius,
-                           repeat_distance=1.0)
-    '''
+        sp = make_snowpack(thickness_1, model, density=sn_density, radius=radius, stickiness=stickiness)
 
     return sp
 
-def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rms, eq_num):
+def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rms, eq_num, radius, stickiness):
     '''
     Calculate emissivity over snowpack
 
@@ -62,6 +56,8 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
     :param sn_density: snow density [kg/m3]
     :param substrate: substrate name
     :param roughness_rms: roughness [mm]
+    :param radius: radii of particels [mm]
+    :param stickiness: stickiness
     :return: emissitivity at H- and V-polarization
     '''
 
@@ -104,9 +100,12 @@ def calc_e(fq, thickness_1, T, model, theta, sn_density, substrate, roughness_rm
                                              tbup=0,
                                              trans=1)
 
+    print(f'Crystal radius: {radius_um}')
     snowpack = setup_snowpack(T=T, model=model,
                               thickness_1=thickness_1,
-                              sn_density=sn_density)
+                              sn_density=sn_density,
+                              radius=radius,
+                              stickiness=stickiness)
 
     # add snowpack on top of substrate:
     medium = snowpack + substrate
@@ -166,11 +165,13 @@ def calc_emissivity_thickness(fq, snow_thickness=1, T=265,
                               sn_density=320,
                               substrate='MYI',
                               roughness_rms=None,
-                              eq_num=1):
+                              eq_num=1,
+                              radius=1e-4,
+                              stickiness=0.1):
     ''' Calculate emissivity for different thickness '''
     e1_h, e1_v = calc_e(fq, snow_thickness, T,
                         snow_ms_model, theta, sn_density,
-                        substrate, roughness_rms, eq_num)
+                        substrate, roughness_rms, eq_num, radius, stickiness)
     return e1_h, e1_v
 
 ####################################################################
@@ -178,49 +179,61 @@ def calc_emissivity_thickness(fq, snow_thickness=1, T=265,
 ####################################################################
 
 parser = argparse.ArgumentParser(description='Calculate Emissivity')
-
 parser.add_argument('-o', '--out_folder',
                     required=True,
                     help='Output folder')
-
 parser.add_argument('-e', '--e_equation',
                     required=False,
                     help='E-equation number')
-
 args = parser.parse_args()
-
 out_path = args.out_folder
-
 if args.e_equation:
     eq_num = args.e_equation
 else:
-    eq_num=1
+    eq_num = 1
 
+##############################
 # Snow microstructure models
+##############################
 sn_ms_model_list = ['autocorrelation', 'exponential', 'gaussian_random_field',
                     'homogeneous', 'independent_sphere', 'sampled_autocorrelation',
                     'sticky_hard_spheres','test_autocorrelation', 'test_exponential',
                     'test_sticky_hard_spheres', 'teubner_strey', 'unified_autocorrelation',
                     'unified_scaled_exponential', 'unified_sticky_hard_spheres', 'unified_teubner_strey']
 
+snow_ms_model = sn_ms_model_list[6]
 
-snow_ms_model = sn_ms_model_list[4]
-
-# Basic parameters
+############################
+# Instrument parameters
+############################
 fq_list = [7e9, 11e9, 19e9, 24e9, 37e9, 89e9]
 polarizations = ['h', 'v']
 theta = 55
 
+############################
+# Snowpack parameters
+############################
 sn_th_max = 3.
 sn_th_min = 0.01
 sn_th_step = 0.1
-
 sn_density = 600
+densities_list = list(range(100, 700, 100))
+
+############################
+# Substrate parameters
+############################
 substrate = 'land'
 roughness_rms = 0.01
 T = 265.
 
-densities_list = list(range(100, 700, 100))
+############################
+# Microstructure parameters
+############################
+# Crystal radius
+radius = 0.1e-3
+radius_um = int(radius*10**6)
+# Stickiness of 0.2 is recommended as a first guess in SMRT [Loewe and Picard, 2015]
+stickiness = 0.2
 
 d_res = {}
 
@@ -236,8 +249,7 @@ for sn_density in densities_list:
     print(f'\nSnowpack density: {sn_density}')
     for idx, fq in enumerate(fq_list):
         print(fq/1e9)
-
-        # Calculate E for different snow thickness
+        # Calculate E
         for s_th in np.arange(sn_th_min, sn_th_max, sn_th_step):
             e1_h, e1_v = calc_emissivity_thickness(fq=fq,
                                                    snow_thickness=[s_th],
@@ -247,18 +259,17 @@ for sn_density in densities_list:
                                                    substrate=substrate,
                                                    theta=theta,
                                                    roughness_rms=roughness_rms,
-                                                   eq_num=eq_num)
+                                                   eq_num=eq_num,
+                                                   radius=radius,
+                                                   stickiness=stickiness)
             ll_e1_h.append(e1_h)
             ll_e1_v.append(e1_v)
 
         fq_str = fq / 1e9
-
         d_res[sn_density]['h'][fq_str] = {}
         d_res[sn_density]['v'][fq_str] = {}
-
         d_res[sn_density]['h'][fq_str]['e1'] = ll_e1_h
         d_res[sn_density]['v'][fq_str]['e1'] = ll_e1_v
-
         ll_e1_h, ll_e1_v = [], []
 
 ncols = 3
@@ -292,10 +303,12 @@ for i, density in enumerate(d_res.keys()):
                             label=f'{pol.upper()} {ikey} GHz',
                             linestyle='dashed', c=colors[i_color])
 
-    ax[c_ch, r_ch].set_title(f'Snow density={density},'
-                             f'$\Theta$={theta}$^\circ$\nSubstrate:'
-                             f'{substrate_title}\n Surface roughnes={roughness_rms}'
-                             f'\nMicrostructure model={snow_ms_model}',
+    ax[c_ch, r_ch].set_title(f'Snow density={density},\ '
+                             f'$\Theta$={theta}$^\circ$\n Substrate:\ {substrate_title}'
+                             f'\nSurface roughnes={roughness_rms}'
+                             f'\nMicr. model={snow_ms_model}'
+                             f'\nStickiness={}'
+                             f'\nCrystal R={}',
                              fontsize='small')
 
     pol = 'v'
@@ -307,7 +320,7 @@ for i, density in enumerate(d_res.keys()):
     ax[c_ch, r_ch].legend(loc='lower right', prop={'size': 6})
     ax[c_ch, r_ch].grid(linewidth=0.15)
 
-    ax[c_ch, r_ch].set_ylim([0.65, 1.01])
+    ax[c_ch, r_ch].set_ylim([0.25, 1.01])
 
     if r_ch > 0:
         ax[c_ch, r_ch].axes.yaxis.set_ticklabels([])
@@ -323,4 +336,4 @@ plt.xlabel('Snow thickness, m')
 plt.subplots_adjust(hspace=0.1)
 plt.subplots_adjust(wspace=0.1)
 
-plt.savefig(f'{out_path}/e_{snow_ms_model}.png', bbox_inches='tight', dpi=300)
+plt.savefig(f'{out_path}/E_r{radius_um}_s{stickiness}_{snow_ms_model}.png', bbox_inches='tight', dpi=300)
