@@ -180,9 +180,23 @@ parser = argparse.ArgumentParser(description='Calculate Emissivity')
 parser.add_argument('-o', '--out_folder',
                     required=True,
                     help='Output folder')
+
 parser.add_argument('-e', '--e_equation',
                     required=False,
+                    default=1,
                     help='E-equation number')
+
+parser.add_argument('-s', '--stickiness',
+                    required=False,
+                    default=0.2,
+                    help='Stickiness')
+
+parser.add_argument('-r', '--radius',
+                    required=False,
+                    default=0.4e-3,
+                    help='Sphere radius')
+
+
 args = parser.parse_args()
 out_path = args.out_folder
 if args.e_equation:
@@ -228,10 +242,10 @@ T = 265.
 # Microstructure parameters
 ############################
 # Crystal radius
-radius = 0.15e-3
+radius = float(args.radius)
 radius_um = int(radius*10**6)
 # Stickiness of 0.2 is recommended as a first guess in SMRT [Loewe and Picard, 2015]
-stickiness = 0.1
+stickiness = float(args.stickiness)
 
 d_res = {}
 
