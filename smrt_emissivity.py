@@ -186,6 +186,11 @@ parser.add_argument('-e', '--e_equation',
                     default=1,
                     help='E-equation number')
 
+parser.add_argument('-sub', '--substrate',
+                    required=False,
+                    default='land',
+                    help='Substrate type')
+
 parser.add_argument('-s', '--stickiness',
                     required=False,
                     default=0.2,
@@ -234,7 +239,7 @@ densities_list = list(range(100, 700, 100))
 ############################
 # Substrate parameters
 ############################
-substrate = 'land'
+substrate = args.substrate
 roughness_rms = 0.01
 T = 265.
 
@@ -361,4 +366,4 @@ plt.xlabel('Snow thickness, m')
 plt.subplots_adjust(hspace=0.1)
 plt.subplots_adjust(wspace=0.1)
 
-plt.savefig(f'{out_path}/E_r{radius_um}_s{stickiness}_{snow_ms_model}.png', bbox_inches='tight', dpi=300)
+plt.savefig(f'{out_path}/E_{substrate}_r{radius_um}_s{stickiness}_{snow_ms_model}.png', bbox_inches='tight', dpi=300)
