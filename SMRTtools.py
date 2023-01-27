@@ -22,7 +22,47 @@ class SMRTtools:
 
 		# Instrumental parameters
 		if model_parameters is None:
-			raise ValueError('Please set the paramteters')
+			print('Default aparameters will be set for the SMRT run.')
+			model_parameters = {}
+			model_parameters['snow'] = {}
+			model_parameters['land'] = {}
+			model_parameters['ice'] = {}
+			model_parameters['substrate'] = {}
+			model_parameters['instrument'] = {}
+			model_parameters['atmosphere'] = {}
+
+			# Instrument parameters
+			model_parameters['instrument']['fq_list'] = 37e9
+			model_parameters['instrument']['polarizations'] = ['h', 'v']
+			model_parameters['instrument']['theta'] = 55
+
+			# Substrate parameters
+			model_parameters['substrate'] = 'fresh'
+
+			# Atmoshpere
+			model_parameters['atmosphere']['Td'] = 0
+			model_parameters['atmosphere']['Tbup'] = 0
+			model_parameters['atmosphere']['Transmissivity'] = 1
+
+			# Snow
+			model_parameters['snow']['sn_thickness'] = [0.]
+			model_parameters['snow']['sn_density'] = [100]
+			model_parameters['snow']['stickiness'] = 2
+			model_parameters['snow']['radius'] = 0.1e-3
+			model_parameters['snow']['sn_ms_model'] = 6
+			model_parameters['snow']['sn_temp'] = [273.15 - 20]
+
+			# Sea ice
+			total_ice_thickness = 5  # m
+			ice_layers = 2
+			bottom_layer_t_ice = 273.15 - 2
+			skin_layer_t_ice = 273.15 - 20
+			model_parameters['ice']['ice_temp'] = list(np.linspace(skin_layer_t_ice, bottom_layer_t_ice, ice_layers))
+			model_parameters['ice']['num_layers'] = ice_layers
+			model_parameters['ice']['thickness'] = total_ice_thickness
+			model_parameters['ice']['p_ex'] = np.array([1.0e-3] * (model_parameters['ice']['num_layers']))
+			model_parameters['ice']['porosity'] = 0.
+			model_parameters['ice']['layer_thickness'] = list(np.array([total_ice_thickness / ice_layers] * ice_layers))
 		else:
 			self.model_parameters = model_parameters
 
