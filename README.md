@@ -50,6 +50,7 @@ total_ice_thickness = 5 # m
 ice_layers = 2
 bottom_layer_t_ice = 273.15 - 2
 skin_layer_t_ice = 273.15 - 20
+model_parameters['ice']['ice_temp'] = list(np.linspace(skin_layer_t_ice, bottom_layer_t_ice, ice_layers))
 model_parameters['ice']['num_layers'] = ice_layers
 model_parameters['ice']['thickness'] = total_ice_thickness
 model_parameters['ice']['p_ex'] = np.array([1.0e-3] * (model_parameters['ice']['num_layers']))
@@ -59,12 +60,12 @@ model_parameters['ice']['layer_thickness'] = list(np.array([total_ice_thickness 
 
 ```
 
-then you can calculate and print brightness temperature for the model setup
+then you can calculate and print brightness temperature for the model setup:
 
 ``` python
 smrt_setup.calc_tb()
-print('Brightness temperature at V polarization: {:.2f} K'.format(tb.tb.TbV()))
-print('Brightness temperature at H polarization: {:.2f} K'.format(tb.tb.TbH()))
+print('Brightness temperature at V polarization: {:.2f} K'.format(smrt_setup.tb.TbV()))
+print('Brightness temperature at H polarization: {:.2f} K'.format(smrt_setup.tb.TbH()))
 ```
 
 
