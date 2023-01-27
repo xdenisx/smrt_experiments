@@ -4,8 +4,8 @@ This repository contains a Python class and scripts aimed at to make it easier t
 The configuration dictonary consits of several sections, each corresponds to atmoshpere, sea ice, soil and water content, respectively.
 Once such dictonary is initialized, a simulation with the SMRT can be performed using a class ```SMRTtools```. To run the code, you also need to specify a path to your local SMRT code via ```smrt_path```.
 If the dictonary is not specified a default will be used. 
-\br
-We recommend to use the forked version of SMRT to be able to perform idealized simulations like with solid fresh ice. The package can be clones as:
+<br><br>
+We recommend to use the forked version of the SMRT to be able to perform idealized simulations like with solid fresh ice. The package can be cloned as:
 
  ```
  git clone https://github.com/xdenisx/smrt_cut.git
