@@ -231,9 +231,6 @@ class SMRTtools:
 			raise ('Please specify correct equation number (1/2)')
 		print(f'Eh={self.emissivity_H}')
 
-	# From old code (incorrect?)
-	# reflectivity_H = (sresult_0.TbH() + sresult_1.TbH()) / 2 / T
-
 	def layers_of_model(self,
 						n_ice_layers=10,
 						n_snow_layers=4,
