@@ -20,7 +20,6 @@ class SMRTtools:
 		except Exception as e:
 			raise Exception(f'{e}, the path \'{smrt_path}\' is not correct, please specify another. End.\n')
 
-		# Instrumental parameters
 		if model_parameters is None:
 			print('Default aparameters will be set for the SMRT run.')
 			model_parameters = {}
