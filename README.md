@@ -36,7 +36,7 @@ model_parameters['instrument']['fq_list'] = 37e9
 model_parameters['instrument']['polarizations'] = ['h','v']
 model_parameters['instrument']['theta'] = 55
 
-# Substrate parameters          
+# Substrate parameters (fresh ice)         
 model_parameters['substrate'] = 'fresh'
 
 # Atmoshpere
