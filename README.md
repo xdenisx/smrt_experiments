@@ -66,6 +66,8 @@ skin_layer_t_ice = 273.15 - 20
 model_parameters['ice']['ice_temp'] = list(np.linspace(skin_layer_t_ice, bottom_layer_t_ice, ice_layers))
 model_parameters['ice']['num_layers'] = ice_layers
 model_parameters['ice']['thickness'] = total_ice_thickness
+# 2 - homogeneous 
+model_parameters['ice']['ms_model'] = 2
 model_parameters['ice']['p_ex'] = np.array([1.0e-3] * ice_layers)
 model_parameters['ice']['porosity'] = 0.
 model_parameters['ice']['layer_thickness'] = list(np.array([total_ice_thickness / ice_layers] * ice_layers))

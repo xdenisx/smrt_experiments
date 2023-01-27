@@ -143,7 +143,7 @@ class SMRTtools:
 			self.substrate = self.make_ice_column(ice_type=self.model_parameters['substrate'],
 												  thickness=self.model_parameters['ice']['layer_thickness'],
 												  temperature=self.model_parameters['ice']['ice_temp'],
-												  microstructure_model='homogeneous',
+												  microstructure_model=self.sn_ms_model_list[self.model_parameters['ice']['ms_model']],
 												  corr_length=self.model_parameters['ice']['p_ex'],
 												  add_water_substrate=True
 											 )
