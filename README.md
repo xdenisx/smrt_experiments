@@ -10,7 +10,7 @@ We recommend to use the forked repository of the SMRT that is currently used at 
  git clone https://github.com/xdenisx/smrt_cut.git
 ```
 
-In the following code, an example of the SMRT initialization with a dictonary ``model_parameters`` comprising fresh ice without snowpack is shown:
+An example of the SMRT initialization with a dictonary ``model_parameters`` comprising fresh ice without snowpack is shown:
 
 ```python
 from SMRTtools import SMRTtools
