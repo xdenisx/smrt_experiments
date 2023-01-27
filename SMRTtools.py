@@ -196,6 +196,7 @@ class SMRTtools:
 
 		self.tb = self.m.run(self.radiometer, self.medium)
 
+	# TODO: under development
 	def calc_e(self):
 		'''
 		Calculate Emissivity
