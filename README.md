@@ -54,6 +54,7 @@ model_parameters['snow']['sn_thickness'] = [0.]
 model_parameters['snow']['sn_density'] = [100]
 model_parameters['snow']['stickiness'] = 2
 model_parameters['snow']['radius'] = 0.1e-3
+# 6 - sticky_hard_spheres
 model_parameters['snow']['sn_ms_model'] = 6
 model_parameters['snow']['sn_temp'] = [273.15 - 20]
 
