@@ -145,17 +145,17 @@ class SMRTtools:
 		# Add snowpack on top of substrate:
 		if not self.snowpack is None:
 			self.medium = self.snowpack + self.substrate
+			self.medium.atmosphere = self.atmosphere
 		else:
 			self.medium = self.substrate
+			self.medium.atmosphere = self.atmosphere
 
 	def calc_tb(self):
 		'''
 		Calculate brighnness temperature
 		'''
 
-		self.medium.atmosphere = self.atmosphere
-		sresult = self.m.run(self.radiometer, self.medium)
-		self.tb = sresult
+		self.tb = self.m.run(self.radiometer, self.medium)
 
 	def calc_e(self):
 		'''
