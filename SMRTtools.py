@@ -29,7 +29,7 @@ class SMRTtools:
 		self.m = make_model('iba', 'dort',
 							rtsolver_options={'n_max_stream': n_max_stream,
 											  'phase_normalization': 'forced'})
-		if snowpack == True:
+		if not snowpack is None:
 			# Snow and surface parameters
 			print('\nAdding snowpack...')
 			self.sn_ms_model_list = ['autocorrelation', 'exponential', 'gaussian_random_field',
@@ -117,21 +117,11 @@ class SMRTtools:
 											 porosity=self.model_parameters['ice']['porosity'],
 											 # either density or 'porosity' should be set for sea ice. If porosity is given, density is calculated in the model. If none is given, ice is treated as having a porosity of 0% (no air inclusions) corr_length=p_ex, add_water_substrate=\ocean\  # see comment below
 											 corr_length=p_ex,
-											 add_water_substrate=True  # see comment below
+											 add_water_substrate=True
 											 )
 
 		if self.model_parameters['model']['substrate'] == 'Fresh':
-			# Sea ice temperature profile
-			# self.model_parameters['ice']['ice_temp'] = np.linspace(float(self.model_parameters['ice']['temp0']),
-			#                       float(self.model_parameters['ice']['temp1']),
-			#                       int(self.model_parameters['ice']['dtemp']))
-
-			# self.model_parameters['ice']['layer_thickness'] = np.array([self.model_parameters['ice']['thickness'] /
-			#                      self.model_parameters['ice']['num_layers']] * self.model_parameters['ice']['num_layers'])  # ice is N meters thick
-
-			# p_ex = np.array([1.0e-3] * (self.model_parameters['ice']['num_layers']))  # correlation length
-
-			ice_type = 'fresh'  # first-year or multi-year sea ice
+			ice_type = 'fresh'
 			self.substrate = make_ice_column(ice_type=ice_type,
 											 thickness=self.model_parameters['ice']['layer_thickness'],
 											 temperature=self.model_parameters['ice']['ice_temp'],
@@ -151,11 +141,8 @@ class SMRTtools:
 		Calculate brighnness temperature
 		'''
 
-		# Run model without atmosphere
 		self.medium.atmosphere = self.atmosphere
 		sresult = self.m.run(self.radiometer, self.medium)
-		print(f'Brighntness temperature at H-pol: {sresult.TbH()}')
-		print(f'Brighntness temperature at V-pol: {sresult.TbV()}')
 		self.tb = sresult
 
 	def calc_e(self):
