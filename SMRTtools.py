@@ -1,5 +1,3 @@
-import numpy as np
-
 class SMRTtools:
 	def __init__(self, model_parameters=None, smrt_path=None, snowpack=None):
 
@@ -18,6 +16,7 @@ class SMRTtools:
 			self.SimpleIsotropicAtmosphere = SimpleIsotropicAtmosphere
 			from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
 			self.StickyHardSpheres = StickyHardSpheres
+			import numpy as np
 		except Exception as e:
 			raise Exception(f'{e}, the path \'{smrt_path}\' is not correct, please specify another. End.\n')
 
@@ -85,18 +84,29 @@ class SMRTtools:
 		# Set atmospheric parameters
 		print(f'''Init atmosphere with {self.model_parameters['atmosphere']['Td']} K''')
 		self.atmosphere = self.SimpleIsotropicAtmosphere(tbdown=self.model_parameters['atmosphere']['Td'],
-													tbup=self.model_parameters['atmosphere']['Tbup'],
-													trans=self.model_parameters['atmosphere']['Transmissivity'])
+														 tbup=self.model_parameters['atmosphere']['Tbup'],
+														 trans=self.model_parameters['atmosphere']['Transmissivity']
+														 )
+		# Fresh ice
+		if self.model_parameters['model']['substrate'] == 'Fresh':
+			ice_type = 'fresh'
+			self.substrate = self.make_ice_column(ice_type=ice_type,
+											 thickness=self.model_parameters['ice']['layer_thickness'],
+											 temperature=self.model_parameters['ice']['ice_temp'],
+											 microstructure_model='homogeneous',
+											 corr_length=self.model_parameters['ice']['p_ex'],
+											 add_water_substrate=True
+											 )
 
-		# Set substrate
+		# Land
 		if self.model_parameters['model']['substrate'] == 'land':
 			self.substrate = make_soil('soil_wegmuller',
 									   permittivity_model=complex(10, 1),
 									   roughness_rms=self.model_parameters['land']['roughness_rms'],
-									   temperature=self.model_parameters['land']['surface_temp'])
-			# Land surface temperature
-			self.surface_temp = self.model_parameters['land']['surface_temp']
+									   temperature=self.model_parameters['land']['surface_temp']
+									   )
 
+		# Multiyear ice
 		if self.model_parameters['model']['substrate'] == 'MYI':
 			print(f'''Ice porosity: {self.model_parameters['ice']['porosity']}''')
 			print(f'''Ice thickness: {self.model_parameters['ice']['thickness']}''')
@@ -129,16 +139,6 @@ class SMRTtools:
 											 porosity=self.model_parameters['ice']['porosity'],
 											 # either density or 'porosity' should be set for sea ice. If porosity is given, density is calculated in the model. If none is given, ice is treated as having a porosity of 0% (no air inclusions) corr_length=p_ex, add_water_substrate=\ocean\  # see comment below
 											 corr_length=p_ex,
-											 add_water_substrate=True
-											 )
-
-		if self.model_parameters['model']['substrate'] == 'Fresh':
-			ice_type = 'fresh'
-			self.substrate = self.make_ice_column(ice_type=ice_type,
-											 thickness=self.model_parameters['ice']['layer_thickness'],
-											 temperature=self.model_parameters['ice']['ice_temp'],
-											 microstructure_model='homogeneous',
-											 corr_length=self.model_parameters['ice']['p_ex'],
 											 add_water_substrate=True
 											 )
 
