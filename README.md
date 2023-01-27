@@ -42,7 +42,7 @@ model_parameters['substrate'] = 'fresh'
 # For the forked SMRT repo you can use idealized fresh solid ice
 # model_parameters['substrate'] = 'fresh_solid'
 # where the water temperature set to the same as for the ice and salinity to 0
-# see https://github.com/xdenisx/smrt_cut/blob/522952651c0f405b734cb1375f3e73c347bb769f/smrt/inputs/make_medium.py#L612
+# see https://github.com/xdenisx/smrt_cut/blob/34cef6eeb0c819c77396ac7128dd1b824490a1ad/smrt/inputs/make_medium.py#L649
 
 # Atmoshpere
 model_parameters['atmosphere']['Td'] = 0
