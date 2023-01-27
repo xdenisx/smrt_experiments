@@ -10,7 +10,7 @@ We recommend to use the forked repository of the SMRT that is currently used at 
  git clone https://github.com/xdenisx/smrt_cut.git
 ```
 
-In the following code, an example of the SMRT initialization with a dictonary ``model_parameters`` comprising solid fresh ice without snowpack is shown:
+In the following code, an example of the SMRT initialization with a dictonary ``model_parameters`` comprising fresh ice without snowpack is shown:
 
 ```python
 from SMRTtools import SMRTtools
@@ -38,6 +38,11 @@ model_parameters['instrument']['theta'] = 55
 
 # Substrate parameters (fresh ice)         
 model_parameters['substrate'] = 'fresh'
+
+# For the forked SMRT repo you can use idealized fresh solid ice
+# model_parameters['substrate'] = 'fresh_solid'
+# where the water temperature set to the same as for the ice and salinity to 0
+# see https://github.com/xdenisx/smrt_cut/blob/522952651c0f405b734cb1375f3e73c347bb769f/smrt/inputs/make_medium.py#L612
 
 # Atmoshpere
 model_parameters['atmosphere']['Td'] = 0
