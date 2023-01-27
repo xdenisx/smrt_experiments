@@ -77,8 +77,8 @@ class SMRTtools:
 		Add substrate
 		'''
 
-		if self.model_parameters['model']['substrate'] in self.l_substrate:
-			print(f'''Substrate: {self.model_parameters['model']['substrate']}''')
+		if self.model_parameters['substrate'] in self.l_substrate:
+			print(f'''Substrate: {self.model_parameters['substrate']}''')
 		else:
 			raise ValueError(f'Please specify subtrate name in the model parameters ({self.l_substrate})')
 
@@ -89,8 +89,8 @@ class SMRTtools:
 														 trans=self.model_parameters['atmosphere']['Transmissivity']
 														 )
 		# Fresh solid ice
-		if self.model_parameters['model']['substrate'] == 'fresh':
-			self.substrate = self.make_ice_column(ice_type=self.model_parameters['model']['substrate'],
+		if self.model_parameters['substrate'] == 'fresh':
+			self.substrate = self.make_ice_column(ice_type=self.model_parameters['substrate'],
 												  thickness=self.model_parameters['ice']['layer_thickness'],
 												  temperature=self.model_parameters['ice']['ice_temp'],
 												  microstructure_model='homogeneous',
@@ -99,7 +99,7 @@ class SMRTtools:
 											 )
 
 		# Land
-		if self.model_parameters['model']['substrate'] == 'land':
+		if self.model_parameters['substrate'] == 'land':
 			self.substrate = make_soil('soil_wegmuller',
 									   permittivity_model=complex(10, 1),
 									   roughness_rms=self.model_parameters['land']['roughness_rms'],
@@ -107,11 +107,11 @@ class SMRTtools:
 									   )
 
 		# Multiyear ice
-		if self.model_parameters['model']['substrate'] == 'MYI':
+		if self.model_parameters['substrate'] == 'MYI':
 			print(f'''Ice porosity: {self.model_parameters['ice']['porosity']}''')
 			print(f'''Ice thickness: {self.model_parameters['ice']['thickness']}''')
 			print(f'''Ice surface T: {self.model_parameters['ice']['temp']}''')
-			print(f'''Making model {self.model_parameters['model']['substrate']}''')
+			print(f'''Making model {self.model_parameters['substrate']}''')
 			# prepare inputs
 			l = self.model_parameters['ice']['num_layers']
 			self.self.model_parameters['ice']['layer_thickness'] = np.array(

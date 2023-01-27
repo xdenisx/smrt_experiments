@@ -27,7 +27,7 @@ model_parameters = {}
 model_parameters['snow'] = {}
 model_parameters['land'] = {}
 model_parameters['ice'] = {}
-model_parameters['model'] = {}
+model_parameters['substrate'] = {}
 model_parameters['instrument'] = {}
 model_parameters['atmosphere'] = {}
 
@@ -37,7 +37,7 @@ model_parameters['instrument']['polarizations'] = ['h','v']
 model_parameters['instrument']['theta'] = 55
 
 # Model parameters          
-model_parameters['model']['substrate'] = 'fresh'
+model_parameters['substrate'] = 'fresh'
 
 # Atmoshpere
 model_parameters['atmosphere']['Td'] = 0
