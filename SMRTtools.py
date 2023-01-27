@@ -1,13 +1,25 @@
-import sys
-sys.path.append("../smrt")
-from smrt import make_snowpack, make_model, make_soil, sensor_list, make_ice_column, PSU
-from smrt.atmosphere.simple_isotropic_atmosphere import SimpleIsotropicAtmosphere
-from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
-import smrt
 import numpy as np
 
 class SMRTtools:
-	def __init__(self, model_parameters=None, snowpack=None):
+	def __init__(self, model_parameters=None, smrt_path=None, snowpack=None):
+
+		# Import SMRT code from user provided path
+		import sys
+		sys.path.append(smrt_path)
+		try:
+			from smrt import make_snowpack, make_model, make_soil, sensor_list, make_ice_column, PSU
+			self.make_snowpack = make_snowpack
+			self.make_model = make_model
+			self.make_soil = make_soil
+			self.sensor_list = sensor_list
+			self.make_ice_column = make_ice_column
+			self.PSU = PSU
+			from smrt.atmosphere.simple_isotropic_atmosphere import SimpleIsotropicAtmosphere
+			self.SimpleIsotropicAtmosphere = SimpleIsotropicAtmosphere
+			from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
+			self.StickyHardSpheres = StickyHardSpheres
+		except:
+			print(f'\nError! SMRT path \'{smrt_path}\' is not correct, please specify another. End.\n')
 
 		# Instrumental parameters
 		if model_parameters is None:
@@ -72,7 +84,7 @@ class SMRTtools:
 
 		# Set atmospheric parameters
 		print(f'''Init atmosphere with {self.model_parameters['atmosphere']['Td']} K''')
-		self.atmosphere = SimpleIsotropicAtmosphere(tbdown=self.model_parameters['atmosphere']['Td'],
+		self.atmosphere = self.SimpleIsotropicAtmosphere(tbdown=self.model_parameters['atmosphere']['Td'],
 													tbup=self.model_parameters['atmosphere']['Tbup'],
 													trans=self.model_parameters['atmosphere']['Transmissivity'])
 
@@ -122,7 +134,7 @@ class SMRTtools:
 
 		if self.model_parameters['model']['substrate'] == 'Fresh':
 			ice_type = 'fresh'
-			self.substrate = make_ice_column(ice_type=ice_type,
+			self.substrate = self.make_ice_column(ice_type=ice_type,
 											 thickness=self.model_parameters['ice']['layer_thickness'],
 											 temperature=self.model_parameters['ice']['ice_temp'],
 											 microstructure_model='homogeneous',

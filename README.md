@@ -2,13 +2,13 @@
 
 This repository contains a Python class and scripts aimed at to make it easier the SMRT model [Picard, 2018] run using a unified dictonary of parameters.
 The configuration dictonary consits of several sections, each corresponds to atmoshpere, sea ice, soil and water content, respectively.
-Once such dictonary is initialized, a simulation with the SMRT can be performed using a class ```SMRTtools```.
+Once such dictonary is initialized, a simulation with the SMRT can be performed using a class ```SMRTtools```. To run the code, you also need to specify a path to your local SMRT code via ```smrt_path```.
 If the dictonary is not specified a default will be used. In the follow the model is initialized with a dictonary ``model_parameters`` with solid ice and without snowpack:
 
 ```python
 from SMRTtools import SMRTtools
 
-smrt_setup = SMRTtools(model_parameters=model_parameters, snowpack=None)
+smrt_setup = SMRTtools(model_parameters=model_parameters, smrt_path='../smrt', snowpack=None)
 ```
 
 where ```model_parameters``` initialized as follows:
