@@ -18,8 +18,8 @@ class SMRTtools:
 			self.SimpleIsotropicAtmosphere = SimpleIsotropicAtmosphere
 			from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
 			self.StickyHardSpheres = StickyHardSpheres
-		except:
-			print(f'\nError! SMRT path \'{smrt_path}\' is not correct, please specify another. End.\n')
+		except Exception as e:
+			raise Exception(f'{e}, the path \'{smrt_path}\' is not correct, please specify another. End.\n')
 
 		# Instrumental parameters
 		if model_parameters is None:
