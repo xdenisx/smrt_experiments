@@ -5,7 +5,7 @@ The configuration dictonary consits of several sections, each corresponds to atm
 Once such dictonary is initialized, a simulation with the SMRT can be performed using a class ```SMRTtools```. To run the code, you also need to specify a path to your local SMRT code via ```smrt_path```.
 If the dictonary is not specified a default will be used. 
 <br><br>
-We recommend to use the forked version of the SMRT to be able to perform idealized simulations like with solid fresh ice. The package can be cloned as:
+We recommend to use the forked repository of the SMRT that is currently used at the Department of Space, Earth and Environment of Chalmers University of Technology. It allows to perform idealized simulations such as with solid fresh ice and parametrized water content under the ice. The package can be cloned as:
 
  ```
  git clone https://github.com/xdenisx/smrt_cut.git
