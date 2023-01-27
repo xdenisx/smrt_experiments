@@ -21,7 +21,7 @@ class SMRTtools:
 			raise Exception(f'{e}, the path \'{smrt_path}\' is not correct, please specify another. End.\n')
 
 		if model_parameters is None:
-			print('Default aparameters will be set for the SMRT run.')
+			print('Default parameters will be set for the SMRT run.')
 			model_parameters = {}
 			model_parameters['snow'] = {}
 			model_parameters['land'] = {}
