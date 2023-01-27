@@ -1,5 +1,5 @@
 class SMRTtools:
-	def __init__(self, model_parameters=None, smrt_path=None, snowpack=None):
+	def __init__(self, model_parameters=None, smrt_path=None, snowpack=True):
 
 		# Import SMRT code from user provided path
 		import sys
