@@ -1,3 +1,10 @@
+import sys
+sys.path.append("../smrt")
+from smrt import make_snowpack, make_model, make_soil, sensor_list, make_ice_column, PSU
+from smrt.atmosphere.simple_isotropic_atmosphere import SimpleIsotropicAtmosphere
+from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
+import smrt
+
 class SMRTtools:
 	def __init__(self, model_parameters=None, snowpack=None):
 
@@ -65,8 +72,8 @@ class SMRTtools:
 		# Set atmospheric parameters
 		print(f'''Init atmosphere with {self.model_parameters['atmosphere']['Td']} K''')
 		self.atmosphere = SimpleIsotropicAtmosphere(tbdown=self.model_parameters['atmosphere']['Td'],
-													tbup=model_parameters['atmosphere']['Tbup'],
-													trans=model_parameters['atmosphere']['Transmissivity'])
+													tbup=self.model_parameters['atmosphere']['Tbup'],
+													trans=self.model_parameters['atmosphere']['Transmissivity'])
 
 		# Set substrate
 		if self.model_parameters['model']['substrate'] == 'land':
@@ -128,7 +135,7 @@ class SMRTtools:
 											 thickness=self.model_parameters['ice']['layer_thickness'],
 											 temperature=self.model_parameters['ice']['ice_temp'],
 											 microstructure_model='homogeneous',
-											 corr_length=model_parameters['ice']['p_ex'],
+											 corr_length=self.model_parameters['ice']['p_ex'],
 											 add_water_substrate=True
 											 )
 
