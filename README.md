@@ -19,7 +19,7 @@ from SMRTtools import SMRTtools
 smrt_setup = SMRTtools(model_parameters=model_parameters, smrt_path='../smrt_cut', snowpack=None)
 ```
 
-where ```model_parameters``` initialized as follows:
+where the dictonary ```model_parameters``` initialized as follows:
 
 ```python
 # Model, snow and substrate parameters
@@ -32,7 +32,7 @@ model_parameters['model'] = {}
 model_parameters['instrument'] = {}
 model_parameters['atmosphere'] = {}
 
-# Instrumental parameters
+# Instrument parameters
 model_parameters['instrument']['fq_list'] = 37e9
 model_parameters['instrument']['polarizations'] = ['h','v']
 model_parameters['instrument']['theta'] = 55
