@@ -4,6 +4,7 @@ from smrt import make_snowpack, make_model, make_soil, sensor_list, make_ice_col
 from smrt.atmosphere.simple_isotropic_atmosphere import SimpleIsotropicAtmosphere
 from smrt.microstructure_model.sticky_hard_spheres import StickyHardSpheres
 import smrt
+import numpy as np
 
 class SMRTtools:
 	def __init__(self, model_parameters=None, snowpack=None):
