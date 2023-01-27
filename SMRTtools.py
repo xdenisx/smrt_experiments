@@ -33,7 +33,7 @@ class SMRTtools:
 		n_max_stream = 128
 
 		# Substrate parameters
-		self.l_substrate = ['land', 'Fresh', 'MYI']
+		self.l_substrate = ['land', 'fresh', 'MYI']
 
 		# Initialize EM Model
 		# !Phase normalization is not recommended but temprorary used here
@@ -64,7 +64,8 @@ class SMRTtools:
 				thickness=self.model_parameters['snow']['sn_thickness'],
 				temperature=self.model_parameters['snow']['sn_temp'],
 				radius=self.model_parameters['snow']['radius'],
-				stickiness=self.model_parameters['snow']['stickiness'])
+				stickiness=self.model_parameters['snow']['stickiness']
+			)
 			print('Done\n')
 		else:
 			self.snowpack = None
@@ -87,15 +88,14 @@ class SMRTtools:
 														 tbup=self.model_parameters['atmosphere']['Tbup'],
 														 trans=self.model_parameters['atmosphere']['Transmissivity']
 														 )
-		# Fresh ice
-		if self.model_parameters['model']['substrate'] == 'Fresh':
-			ice_type = 'fresh'
-			self.substrate = self.make_ice_column(ice_type=ice_type,
-											 thickness=self.model_parameters['ice']['layer_thickness'],
-											 temperature=self.model_parameters['ice']['ice_temp'],
-											 microstructure_model='homogeneous',
-											 corr_length=self.model_parameters['ice']['p_ex'],
-											 add_water_substrate=True
+		# Fresh solid ice
+		if self.model_parameters['model']['substrate'] == 'fresh':
+			self.substrate = self.make_ice_column(ice_type=self.model_parameters['model']['substrate'],
+												  thickness=self.model_parameters['ice']['layer_thickness'],
+												  temperature=self.model_parameters['ice']['ice_temp'],
+												  microstructure_model='homogeneous',
+												  corr_length=self.model_parameters['ice']['p_ex'],
+												  add_water_substrate=True
 											 )
 
 		# Land

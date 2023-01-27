@@ -3,12 +3,20 @@
 This repository contains a Python class and scripts aimed at to make it easier the SMRT model [Picard, 2018] run using a unified dictonary of parameters.
 The configuration dictonary consits of several sections, each corresponds to atmoshpere, sea ice, soil and water content, respectively.
 Once such dictonary is initialized, a simulation with the SMRT can be performed using a class ```SMRTtools```. To run the code, you also need to specify a path to your local SMRT code via ```smrt_path```.
-If the dictonary is not specified a default will be used. In the follow the model is initialized with a dictonary ``model_parameters`` with solid ice and without snowpack:
+If the dictonary is not specified a default will be used. 
+\br
+We recommend to use the forked version of SMRT to be able to perform idealized simulations like with solid fresh ice. The package can be clones as:
+
+ ```
+ git clone https://github.com/xdenisx/smrt_cut.git
+```
+
+In the following code, an example of the SMRT initialization with a dictonary ``model_parameters`` comprising solid fresh ice without snowpack is shown:
 
 ```python
 from SMRTtools import SMRTtools
 
-smrt_setup = SMRTtools(model_parameters=model_parameters, smrt_path='../smrt', snowpack=None)
+smrt_setup = SMRTtools(model_parameters=model_parameters, smrt_path='../smrt_cut', snowpack=None)
 ```
 
 where ```model_parameters``` initialized as follows:
@@ -30,7 +38,7 @@ model_parameters['instrument']['polarizations'] = ['h','v']
 model_parameters['instrument']['theta'] = 55
 
 # Model parameters          
-model_parameters['model']['substrate'] = 'Fresh'
+model_parameters['model']['substrate'] = 'fresh'
 
 # Atmoshpere
 model_parameters['atmosphere']['Td'] = 0
