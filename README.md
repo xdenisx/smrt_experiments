@@ -1,9 +1,9 @@
 # SMRT tools
 
-This repository contains class and scripts aimed at easier to make a SMRT model [Picard, 2018] run using a unified dictonary of parameters.
-The configuration dictonary consits of several sections, each corresponds to atmoshpere, sea ice, soil and water content.
+This repository contains a Python class and scripts aimed at to make it easier a SMRT model [Picard, 2018] run using a unified dictonary of parameters.
+The configuration dictonary consits of several sections, each corresponds to atmoshpere, sea ice, soil and water content, respectively.
 Once such dictonary is initialized, a simulation with the SMRT can be performed using a class ```SMRTtools```.
-If the dictonary is not specified a default will be used. In the follow the model is initialized with a dictonary ``model_parameters`` and without snowpack:
+If the dictonary is not specified a default will be used. In the follow the model is initialized with a dictonary ``model_parameters`` with solid ice and without snowpack:
 
 ```python
 from SMRTtools import SMRTtools
