@@ -135,6 +135,7 @@ class SMRTtools:
 												  temperature=self.model_parameters['ice']['ice_temp'],
 												  microstructure_model='homogeneous',
 												  corr_length=self.model_parameters['ice']['p_ex'],
+												  porosity=self.model_parameters['ice']['porosity'],
 												  add_water_substrate=True
 												  )
 
@@ -146,7 +147,7 @@ class SMRTtools:
 												  microstructure_model=self.sn_ms_model_list[self.model_parameters['ice']['ms_model']],
 												  corr_length=self.model_parameters['ice']['p_ex'],
 												  add_water_substrate=True
-											 )
+												  )
 
 		# Land
 		if self.model_parameters['substrate'] == 'land':
